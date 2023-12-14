@@ -1,10 +1,11 @@
 import 'dart:convert';
 
+import 'package:flutter/cupertino.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:workshop4/core/models/task.dart';
 import 'package:workshop4/core/shared/enums.dart';
 
-class TaskService {
+class TaskViewModel extends ChangeNotifier {
   List<Task> tasks = [];
 
   Task _createTask(String title, String description, String date, Status status) {
@@ -17,15 +18,18 @@ class TaskService {
   }
 
   void addTask(String title, String description, String date) {
-    tasks.add(_createTask('title', 'description', 'date', Status.toDo));
+    tasks.add(_createTask(title, description, date, Status.toDo));
+    notifyListeners();
   }
 
   void deleteTask(int index) async {
     tasks.removeAt(index);
+    notifyListeners();
   }
 
   void changeStatus(int index, Status status) async {
     tasks[index].status = status;
+    notifyListeners();
   }
 
   void saveTasks() async {
